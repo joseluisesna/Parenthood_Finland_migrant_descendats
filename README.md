@@ -4,21 +4,21 @@ Code to Estévez, J. L., & Rotkirch. A. (In preparation) 'Between Too Early and 
 
 **Software requirements**
 
-R (code was last run with R version 4.2.1 in RStudio 2022.07.1-554)
+R (code was last run with R version 4.2.2 in RStudio 2022.07.0)
 
-- data.table ()
-- dplyr ()
-- survival ()
-- ggplot2 ()
-- ggpubr ()
-- cem ()
-- khb ()
+- data.table (1.14.4)
+- dplyr (1.0.10)
+- survival (3.4-0)
+- ggplot2 (3.4.0)
+- ggpubr (0.4.0)
+- cem (1.1.31)
+- khb (0.11)
 
 **File list**
 
-- 01_Sample_selection
-- 02_Background_reconstruction
-- 03_Group_identification
-- 04_Data_exploration
-- 05_Modeling_time_and_matching
-- 06_Data_modeling
+- 01_Sample_selection.R
+- 02_Background_reconstruction.R
+- 03_Group_identification.R
+- 04_Data_exploration.R
+- 05_Modeling_time_and_matching.R
+- 06_Data_modeling.R
