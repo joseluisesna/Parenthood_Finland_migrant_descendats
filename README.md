@@ -1,6 +1,6 @@
 # Parenthood Timing among Migrant Descendants in Finland (birth cohorts 1980-1999)
 
-Code to Estévez, J. L., & Rotkirch. A. (In preparation) 'Between Too Early and Not Soon Enough: Examining Timing of Parenthood among Migrant Descendants'.
+Code to Estévez, J. L., & Rotkirch. A. (In preparation) 'Too Early or Not Soon Enough? Examining Timing of Parenthood among Migrant Descendants'.
 
 **Software requirements**
 
