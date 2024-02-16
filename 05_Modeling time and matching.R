@@ -46,24 +46,21 @@ m0 <- glm(formula = mom ~ 1,
           data=indivyear,family=binomial(link='logit')) # constant
 m1 <- glm(formula = mom ~ std.age,
           data=indivyear,family=binomial(link='logit')) # linear
-m2 <- glm(formula = mom ~ std.age + I(std.age^2),
+m2 <- glm(formula = mom ~ poly(std.age,2),
           data=indivyear,family=binomial(link='logit')) # quadratic
-m3 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3),
+m3 <- glm(formula = mom ~ poly(std.age,3),
           data=indivyear,family=binomial(link='logit')) # cubic
-m4 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3) + I(std.age^4),
+m4 <- glm(formula = mom ~ poly(std.age,4),
           data=indivyear,family=binomial(link='logit')) # fourth-power polynomial
-m5 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5),
+m5 <- glm(formula = mom ~ poly(std.age,5),
           data=indivyear,family=binomial(link='logit')) # fifth-power polynomial
-m6 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5) + I(std.age^6),
+m6 <- glm(formula = mom ~ poly(std.age,6),
           data=indivyear,family=binomial(link='logit')) # sixth-power polynomial
-m7 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5) + I(std.age^6) 
-          + I(std.age^7),
+m7 <- glm(formula = mom ~ poly(std.age,7),
           data=indivyear,family=binomial(link='logit')) # seventh-power polynomial
-m8 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5) + I(std.age^6) 
-          + I(std.age^7) + I(std.age^8),
+m8 <- glm(formula = mom ~ poly(std.age,8),
           data=indivyear,family=binomial(link='logit')) # eighth-power polynomial
-m9 <- glm(formula = mom ~ std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5) + I(std.age^6) 
-          + I(std.age^7) + I(std.age^8) + I(std.age^9),
+m9 <- glm(formula = mom ~ poly(std.age,9),
           data=indivyear,family=binomial(link='logit')) # ninth-power polynomial
 
 # Summary table
