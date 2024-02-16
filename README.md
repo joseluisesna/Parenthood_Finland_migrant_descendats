@@ -1,4 +1,4 @@
-# Parenthood Timing among Migrant Descendants in Finland (birth cohorts 1980-1999)
+# Parenthood among Migrant Descendants in Finland (birth cohorts 1980-1999)
 
 Code to Estévez, J. L., & Rotkirch. A. (In preparation) 'Challenges in the Pathway to Parenthood and Their Part in Explaining Depressed Fertility Among Migrant Descendants'. https://osf.io/preprints/socarxiv/aqw6h/.
 
