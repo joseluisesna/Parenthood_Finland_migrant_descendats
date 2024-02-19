@@ -12,6 +12,7 @@ R (code was last run with R version 4.2.2 in RStudio 2022.07.0)
 - ggplot2 (3.4.0)
 - ggpubr (0.4.0)
 - cem (1.1.31)
+- splines (4.2.2)
 - khb (0.11)
 - sjPlot (2.8.15)
 
