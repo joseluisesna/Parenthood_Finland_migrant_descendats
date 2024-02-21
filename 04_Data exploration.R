@@ -153,7 +153,8 @@ p1 <- ggplot(data=hazarddata,
   theme_bw() +
   scale_color_manual(values=c('Native'='black','1.5G migrant'='firebrick2','2G migrant'='darkgoldenrod','2.5G migrant'='dodgerblue')) +
   xlab("") + ylab("Estimated hazard probability") + labs(group='',color='') +
-  theme(legend.position = 'top',legend.justification = 'center',strip.background = element_rect(fill='black'))
+  theme(legend.position = 'top',legend.justification = 'center',
+        strip.background = element_rect(fill='black'),strip.text=element_text(color='white'))
 
 # Estimated survival probability
 p2 <- ggplot(data=hazarddata,
@@ -164,7 +165,8 @@ p2 <- ggplot(data=hazarddata,
   theme_bw() +
   scale_color_manual(values=c('Native'='black','1.5G migrant'='firebrick2','2G migrant'='darkgoldenrod','2.5G migrant'='dodgerblue')) +
   xlab("Age at first child") + ylab("Estimated survival probability") + labs(group='',color='') +
-  theme(legend.position = 'top',legend.justification = 'center',strip.background = element_rect(fill='black'))
+  theme(legend.position = 'top',legend.justification = 'center',
+        strip.background = element_rect(fill='black'),strip.text=element_text(color='white'))
 
 jpeg(filename="fig.curves.jpeg",width=15,height=8,units='in',res=500)
 ggarrange(p1,p2,

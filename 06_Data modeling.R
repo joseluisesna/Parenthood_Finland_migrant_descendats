@@ -8,7 +8,8 @@
 rm(list=ls())
 
 # REQUIRED PACKAGES
-library(data.table);library(khb);library(ggplot2);library(sjPlot);library(stargazer)
+library(data.table);library(khb);library(ggplot2);library(sjPlot);library(stargazer);library(splines);library(sjPlot)
+library(ggpubr)
 
 # DATA LOADING
 load('cem.sample.RData')
@@ -29,6 +30,8 @@ indivyear[,partnerstatus := factor(partnerstatus,labels=c('never','single','coha
 indivyear[,partnerstatus := relevel(partnerstatus,ref='cohab')] # ref category: cohabitation
 
 indivyear[,education := factor(education,labels=c('In.edu','low','inter','high'))]
+# Let's use intermediate education as reference category
+indivyear[,education := relevel(education,ref='inter')]
 
 ########################################################################################################################
 
@@ -36,7 +39,7 @@ indivyear[,education := factor(education,labels=c('In.edu','low','inter','high')
 
 # MODEL 0 (no weights)
 model0 <- glm(formula = mom ~ X
-              + std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5) 
+              + poly(start,5) 
               + birthcohort,
               data=indivyear,family=binomial(link='logit'))
 summary(model0)
@@ -90,7 +93,7 @@ indivyear[,sum(mom)]
 
 # MODEL 1
 model1 <- glm(formula = mom ~ X
-              + std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5) 
+              + poly(start,5) 
               + birthcohort,
               data=indivyear,family=binomial(link='logit'))
 summary(model1)
@@ -99,11 +102,8 @@ stargazer(model1,type='text')
 AIC(model1);BIC(model1) # GOF
 
 # MODEL 2
-# Let's use intermediate education as reference category
-indivyear[,education := relevel(education,ref='inter')] 
-
 model2 <- glm(formula = mom ~ X
-              + std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5)              
+              + poly(start,5)              
               + birthcohort
               + education + partnerstatus,
               data=indivyear,family=binomial(link='logit'))
@@ -114,21 +114,35 @@ AIC(model2);BIC(model2) # GOF
 
 # MODEL 3 (with interaction education x partnership status)
 model3 <- glm(formula = mom ~ X
-              + std.age + I(std.age^2) + I(std.age^3) + I(std.age^4) + I(std.age^5)              
+              + poly(start,5)              
               + birthcohort
-              + education + partnerstatus + education:partnerstatus,
+              + education*partnerstatus,
               data=indivyear,family=binomial(link='logit'))
 summary(model3)
 round(exp(coefficients(model3)),2) # exp(coeff)
 stargazer(model1,model2,model3,type='text')
 AIC(model3);BIC(model3) # GOF
 
+# MODEL 4 (with interaction age and background)
+model4 <- glm(formula = mom ~ X*bs(start,degree=3)              
+              + birthcohort
+              + education + partnerstatus,
+              data=indivyear,family=binomial(link='logit'))
+summary(model4)
+round(exp(coefficients(model4)),2) # exp(coeff)
+stargazer(model1,model2,model4,type='text')
+AIC(model4);BIC(model4) # GOF
+
+# Save these data and model for plotting
+save(indivyear,file='modeling.data.RData')
+save(model4,file="with.splines.RData")
+
 ########################################################################################################################
 
 # MEDIATION ANALYSES (KHB)
 
 # Remove unnecessary objects
-rm(indivyear);rm(model0);rm(model3)
+rm(list=setdiff(ls(),c("model1","model2")))
 
 # BOTH EDUCATION AND PARTNER STATUS
 km12 <- khb(model1,model2) # Mediating effect of education and partner status
@@ -166,20 +180,26 @@ khb.plot[,type := factor(type,levels=1:6,
                          labels = c('In education','Low/Unknown education','High education',
                                     'Never partnered','Previous partner','Marriage'))]
 
+# For colors, based on significance and direction of the effect
+khb.plot[,sig := ifelse(coeff - se*qnorm(.975) > 0,'positive',
+                        ifelse(coeff + se*qnorm(.975) < 0,'negative','no effect'))]
+
 # Visualization
-jpeg(filename="fig.ind.effects.khb.jpeg",width=15,height=9,units='in',res=500)
+jpeg(filename="fig.ind.effects.khb.jpeg",width=10,height=9,units='in',res=500)
 ggplot(data = khb.plot,
        aes(x=coeff,
            y=factor(origin,levels=rev(levels(origin))),
-           color=gen)) +
+           shape=gen,
+           color=sig)) +
   geom_vline(xintercept = 0,color='black',linetype='dashed') +
   geom_pointrange(aes(xmin=coeff - se*qnorm(.975),xmax=coeff + se*qnorm(.975))) +
   facet_wrap(~type,ncol=3,scales='free_x') +
   theme_bw() +
-  scale_color_manual(values=c('1.5G migrant'='firebrick2','2G migrant'='darkgoldenrod','2.5G migrant'='dodgerblue')) +
-  xlab('Log-Odds') + ylab('') + labs(group='',color='') +
-  theme(strip.background = element_rect(fill='black')) +
-  theme(legend.position = 'top',legend.justification = 'center',strip.background = element_rect(fill='black'))
+  scale_shape_manual(values=c('1.5G migrant'=21,'2G migrant'=22,'2.5G migrant'=24)) +
+  scale_color_manual(values=c('no effect'='grey','positive'='blue','negative'='red')) +
+  xlab('Log-Odds') + ylab('') + labs(group='',shape='',color='') +
+  theme(legend.position = 'top',legend.justification = 'center',
+        strip.background = element_rect(fill='black'),strip.text=element_text(color='white'))
 dev.off()
 
 ########################################################################################################################
